@@ -1,0 +1,37 @@
+{
+  "name": "food-finder",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mdedakiya/food-finder"
+  },
+  "author": "mdedakiya",
+  "license": "MIT",
+  "original-credits": "food-finder",
+  "original-credits-repository": {
+    "type": "git",
+    "url": "git://github.com/mdedakiya/food-finder.git"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "gh-pages": "^1.1.0",
+    "prettier": "1.13.0",
+    "react-scripts": "^1.1.4"
+  },
+  "dependencies": {
+    "@material-ui/core": "^1.3.1",
+    "@material-ui/icons": "^1.1.0",
+    "react": "^16.4.0",
+    "react-dom": "^16.4.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "deploy": "gh-pages -d build"
+  },
+  "prettier": {
+    "trailingComma": "all"
+  }
+}
