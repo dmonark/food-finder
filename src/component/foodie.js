@@ -24,7 +24,7 @@ class Foodie extends React.Component {
 
         this.state = {
             open: false,
-            whichCity: 1,
+            whichCity: 4,
             resData: []
         };
 
