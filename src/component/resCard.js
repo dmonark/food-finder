@@ -9,7 +9,7 @@ const ResCard = function(props) {
     return (
         <Grid item xs={props.gridCode}>
                         
-                                <Card key={"res"}>
+                                <Card key={"res"} onClick={() => props.openRes(props.index)}>
                                     <Grid container spacing={0} style={{height: 151}}>
                                         <Grid item xs={8}>
                                             <div style={{display: 'flex', flexDirection: 'column'}}>

@@ -16,7 +16,7 @@ const EditDialog = function(props) {
             disableBackdropClick
             disableEscapeKeyDown
             open={props.open}
-            onClose={props.handleClose}
+            onClose={() => props.handleClose('openCity')}
         >
             <DialogTitle>Edit Changes</DialogTitle>
             <DialogContent>
@@ -39,10 +39,10 @@ const EditDialog = function(props) {
                 </FormControl>
             </DialogContent>
             <DialogActions>
-                <Button onClick={props.handleClose} color="primary">
+                <Button onClick={() => props.handleClose('openCity')} color="primary">
                     Cancel
                 </Button>
-                <Button onClick={props.handleClose} color="primary">
+                <Button onClick={() => props.handleClose('openCity')} color="primary">
                     Ok
                 </Button>
             </DialogActions>
