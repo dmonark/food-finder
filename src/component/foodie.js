@@ -18,7 +18,6 @@ class Foodie extends React.Component {
             openCity: false,
             openRes: false,
             whichCity: 4,
-            whichRes: null,
             resData: [],
             reviewData: []
         };
@@ -69,6 +68,10 @@ class Foodie extends React.Component {
                     tempObj["subLocation"] = resDataRaw[everyResData].restaurant.location.locality_verbose
                     tempObj["cuisines"] = (resDataRaw[everyResData].restaurant.cuisines).split(", ")
                     tempObj["thumb"] = resDataRaw[everyResData].restaurant.thumb
+                    tempObj["location"] = {
+                        "latitude": resDataRaw[everyResData].restaurant.location.latitude,
+                        "longitude": resDataRaw[everyResData].restaurant.location.longitude,
+                    }
                     resData.push(tempObj)
                  }
                 this.setState({

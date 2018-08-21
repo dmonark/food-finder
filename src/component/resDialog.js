@@ -47,7 +47,7 @@ const ReviewDialog = function(props) {
             disableBackdropClick
             disableEscapeKeyDown
             open={props.open}
-            onClose={props.handleClose}
+            onClose={() => props.handleClose('openRes')}
         >
             <DialogTitle id="rating-dialog-title">Review</DialogTitle>  
             <DialogContent>
