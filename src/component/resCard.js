@@ -35,9 +35,15 @@ const ResCard = function(props) {
                         />
                     </Grid>
                 </Grid>
-                <CardActions onClick={() => props.openRes(props.index)}>
-                    <Button size="small" color="primary">
+                <CardActions>
+                    <Button size="small" color="primary" onClick={() => props.openReview(props.index)}>
                         Reviews
+                    </Button>
+                    <Button size="small" color="primary" onClick={() => props.openEvent(props.index)}>
+                        Event
+                    </Button>
+                    <Button size="small" color="primary" onClick={() => props.openArea(props.index)}>
+                        Area
                     </Button>
                 </CardActions>
             </Card>

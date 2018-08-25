@@ -24,6 +24,7 @@
     "google-map-react": "^1.0.6",
     "react": "^16.4.0",
     "react-dom": "^16.4.0",
+    "react-google-maps": "^9.4.5",
     "react-star-rating-component": "^1.4.1"
   },
   "scripts": {

@@ -47,7 +47,7 @@ const ReviewDialog = function(props) {
             disableBackdropClick
             disableEscapeKeyDown
             open={props.open}
-            onClose={() => props.handleClose('openRes')}
+            onClose={() => props.handleClose('openReview')}
         >
             <DialogTitle id="rating-dialog-title">Review</DialogTitle>  
             <DialogContent>
@@ -63,8 +63,8 @@ const ReviewDialog = function(props) {
                 </div>
             </DialogContent>
             <DialogActions>
-                <Button onClick={() => props.handleClose('openRes')} color="primary">
-                    Ok
+                <Button onClick={() => props.handleClose('openReview')} color="primary">
+                    Close
                 </Button>
             </DialogActions>
         </Dialog>
