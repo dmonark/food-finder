@@ -41,7 +41,7 @@ const EventDialog = function(props) {
         >
             <DialogTitle id="map-dialog-title">Events</DialogTitle>
             <DialogContent>
-                <div>
+                <div style={{width: 500}}>
                     {
                         props.eventData.length !== 0 ? ( 
                             props.eventData.map((value, key) => (

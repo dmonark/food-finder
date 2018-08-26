@@ -4,6 +4,7 @@ import Typography from "@material-ui/core/Typography";
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
+import Input from '@material-ui/core/Input';
 
 import ResCard from './resCard';
 import EditDialog from './editDialog';
@@ -23,19 +24,20 @@ class Foodie extends React.Component {
             openReview: false,
             openEvent: false,
             openArea: false,
+            totalRes: 0,
             whichCity: 4,
+            whichSort: "cost",
+            whichOrder: "desc",
+            whichName: "",
+            pageNumber: 0,
             resData: [],
             reviewData: [],
             eventData: [],
-            areaLocation: {
-                "latitude": 0,
-                "longitude": 0
-            }
+            areaLocation: []
         };
 
         this.dataFetcher = this.dataFetcher.bind(this);
         this.handleChange = this.handleChange.bind(this);
-        this.resDataFetcher = this.resDataFetcher.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.handleClickOpen = this.handleClickOpen.bind(this);
         this.openReview = this.openReview.bind(this);
@@ -51,21 +53,25 @@ class Foodie extends React.Component {
         this.setState({ [whatToggle]: false });
     };
 
-    handleChange(event){
-        if(this.state.whichCity !== Number(event.target.value)) {
-            this.setState({ 
-                'whichCity' : Number(event.target.value), 
-                'resData': []
-            }, this.resDataFetcher);
-        }
+    handleChange(whichOne, event){
+        this.setState({ 
+            [whichOne] : event.target.value, 
+            'resData': [],
+            'pageNumber': 0
+        }, this.dataFetcher);
     };
 
-    dataFetcher(count){
+    dataFetcher(){
         
-        var url = "https://developers.zomato.com/api/v2.1/search?entity_id="+this.state.whichCity+"&entity_type=city&start="+count
+        var count = Number(this.state.pageNumber)*18;
+
+        var url = "https://developers.zomato.com/api/v2.1/search?entity_id="+this.state.whichCity+"&entity_type=city&start="+count+"&count=18&sort="+this.state.whichSort+"&order="+this.state.whichOrder
         
+        if(this.state.whichName.trim() !== "")
+            url += "&q="+this.state.whichName;
+
         var successCallback = function(result){
-            var resData = this.state.resData;
+            var resData = [];
             var resDataRaw = result.restaurants;         
             
             for(var everyResData in resDataRaw){
@@ -83,7 +89,8 @@ class Foodie extends React.Component {
                 resData.push(tempObj)
             }
             this.setState({
-                resData: resData
+                resData: resData,
+                totalRes: result.results_found,
             })
         }.bind(this)
 
@@ -97,6 +104,8 @@ class Foodie extends React.Component {
     openReview(index) {
         var resid = this.state.resData[index].id
         var url = "https://developers.zomato.com/api/v2.1/reviews?res_id="+resid
+        
+        this.handleClickOpen('openReview')
 
         var successCallback = function(result){
             var reviewData = []
@@ -114,7 +123,7 @@ class Foodie extends React.Component {
             }
             this.setState({
                 reviewData: reviewData
-            }, this.handleClickOpen('openReview'))
+            })
         }.bind(this)
         
         var errorCallback = function(error){
@@ -127,6 +136,8 @@ class Foodie extends React.Component {
     openEvent(index) {
         var resid = this.state.resData[index].id
         var url = "https://developers.zomato.com/api/v2.1/restaurant?res_id="+resid
+
+        this.handleClickOpen('openEvent')
 
         var successCallback = function(result){
             var eventData = []
@@ -144,7 +155,7 @@ class Foodie extends React.Component {
             }
             this.setState({
                 eventData: eventData
-            }, this.handleClickOpen('openEvent'))
+            })
         }.bind(this)
 
         var errorCallback = function(error){
@@ -162,14 +173,8 @@ class Foodie extends React.Component {
         }, this.handleClickOpen('openArea'))
     }
 
-    resDataFetcher(){
-        this.dataFetcher(0);
-        this.dataFetcher(20);
-        this.dataFetcher(40);
-    }
-
     componentDidMount(){
-        this.resDataFetcher();   
+        this.dataFetcher();   
     }
 
     render() {
@@ -181,17 +186,20 @@ class Foodie extends React.Component {
                             <Typography variant="title" color="inherit" style={{ flex: 1 }}>
                                 Food Finder
                             </Typography>
+                            <div className="app-search">
+                                <Input
+                                    placeholder="Name"
+                                    value={this.state.whichName}
+                                    onChange={(event) => this.handleChange('whichName', event)}        
+                                />
+                            </div>
+                            <div>
+                                <Button color="inherit" disabled={Number(this.state.pageNumber) === 0} onClick={() => this.setState(prevState => ({ pageNumber: prevState.pageNumber-1}), this.dataFetcher)}>Previos</Button>
+                                <Button color="inherit" disabled={(Number(this.state.pageNumber)+1)*18 >= Number(this.state.totalRes)} onClick={() => this.setState(prevState => ({ pageNumber: prevState.pageNumber+1}), this.dataFetcher)}>Next</Button>
+                            </div>
                             <Button color="inherit" onClick={() => this.handleClickOpen('openCity')}>City</Button>
                         </Toolbar>
                     </AppBar>
-                    <div>
-                        <EditDialog
-                            open={this.state.openCity}
-                            whichCity={this.state.whichCity}
-                            handleClose={this.handleClose}
-                            handleChange={this.handleChange}
-                        />
-                    </div>
                 </div>
                 <div>
                     <div>
@@ -210,6 +218,17 @@ class Foodie extends React.Component {
                             ))
                         }
                     </Grid>
+                    </div>
+                    <div>
+                        <EditDialog
+                            open={this.state.openCity}
+                            whichCity={this.state.whichCity}
+                            whichSort={this.state.whichSort}
+                            whichOrder={this.state.whichOrder}
+                            whichName={this.state.whichName}
+                            handleClose={this.handleClose}
+                            handleChange={this.handleChange}
+                        />
                     </div>
                     <div>
                         <ReviewDialog
@@ -235,7 +254,6 @@ class Foodie extends React.Component {
                 </div>
             </div>
         );
-
     }
 }
 

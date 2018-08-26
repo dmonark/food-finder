@@ -1,4 +1,6 @@
-.overflow-con{
-    height: 100vh;
-    overflow: auto;
+.app-search{
+    background: white;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 2px;
 }

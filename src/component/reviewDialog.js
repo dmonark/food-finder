@@ -51,7 +51,7 @@ const ReviewDialog = function(props) {
         >
             <DialogTitle id="rating-dialog-title">Review</DialogTitle>  
             <DialogContent>
-                <div>
+                <div style={{width: 500}}>
                     {
                         props.reviewData.map((value, key) => (
                             <ReviewCard

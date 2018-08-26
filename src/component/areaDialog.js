@@ -16,7 +16,7 @@ const AreaDialog = function(props) {
         >
             <DialogTitle id="map-dialog-title">Foodie</DialogTitle>
             <DialogContent>
-                <div>
+                <div style={{width: 500}}>
                     <div className="widget_wrap" style={{width:'auto',height:'auto',display:'inline-block'}}>
                     <a href="https://www.zomato.com/" title="Foodie Index">
                     <img src={image} style={{width:"200", height:"150"}} alt="Foodie index"/>
