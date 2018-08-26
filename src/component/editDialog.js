@@ -1,28 +1,13 @@
 import React from "react";
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import Button from '@material-ui/core/Button';
 import Grid from "@material-ui/core/Grid";
 
 const EditDialog = function(props) {
-    return (
-        <Dialog
-            disableBackdropClick
-            disableEscapeKeyDown
-            open={props.open}
-            onClose={() => props.handleClose('openCity')}
-        >
-            <DialogTitle>Edit Changes</DialogTitle>
-            <DialogContent>
-                <div style={{width: 500}}>
-                    <div>
+    return (<div>
                     <Grid container spacing={0}>
                         <Grid item xs={4}>
                             <FormControl>
@@ -71,17 +56,7 @@ const EditDialog = function(props) {
                         </Grid>
                     </Grid>
                     </div>
-                </div>
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={() => props.handleClose('openCity')} color="primary">
-                    Cancel
-                </Button>
-                <Button onClick={() => props.handleClose('openCity')} color="primary">
-                    Ok
-                </Button>
-            </DialogActions>
-        </Dialog>
+                
     );
   };
   

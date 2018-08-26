@@ -1,10 +1,5 @@
 import React from "react";
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
 import Typography from "@material-ui/core/Typography";
-import Button from '@material-ui/core/Button';
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardContent from "@material-ui/core/CardContent";
@@ -42,17 +37,8 @@ const ReviewCard = function(props) {
 
 const ReviewDialog = function(props) {
     return (
-        <Dialog
-            
-            disableBackdropClick
-            disableEscapeKeyDown
-            open={props.open}
-            onClose={() => props.handleClose('openReview')}
-        >
-            <DialogTitle id="rating-dialog-title">Review</DialogTitle>  
-            <DialogContent>
-                <div style={{width: 500}}>
-                    {
+        <div>
+        {
                         props.reviewData.map((value, key) => (
                             <ReviewCard
                                 key={"review"+key}
@@ -61,13 +47,7 @@ const ReviewDialog = function(props) {
                         ))
                     }
                 </div>
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={() => props.handleClose('openReview')} color="primary">
-                    Close
-                </Button>
-            </DialogActions>
-        </Dialog>
+            
     );
   };
   

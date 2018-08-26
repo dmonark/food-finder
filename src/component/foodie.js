@@ -5,6 +5,11 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
 import Input from '@material-ui/core/Input';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
 
 import ResCard from './resCard';
 import EditDialog from './editDialog';
@@ -20,38 +25,23 @@ class Foodie extends React.Component {
         super(props);
 
         this.state = {
-            openCity: false,
-            openReview: false,
-            openEvent: false,
-            openArea: false,
-            totalRes: 0,
+            resData: [],
             whichCity: 4,
             whichSort: "cost",
             whichOrder: "desc",
             whichName: "",
             pageNumber: 0,
-            resData: [],
-            reviewData: [],
-            eventData: [],
-            areaLocation: []
+            totalRes: 0,
+            whichOpen: "",
+            whichInfo: []
         };
 
         this.dataFetcher = this.dataFetcher.bind(this);
         this.handleChange = this.handleChange.bind(this);
-        this.handleClose = this.handleClose.bind(this);
-        this.handleClickOpen = this.handleClickOpen.bind(this);
         this.openReview = this.openReview.bind(this);
         this.openEvent = this.openEvent.bind(this);
         this.openArea = this.openArea.bind(this);
     }
-
-    handleClickOpen(whatToggle){
-        this.setState({ [whatToggle]: true });
-    };
-    
-    handleClose(whatToggle){
-        this.setState({ [whatToggle]: false });
-    };
 
     handleChange(whichOne, event){
         this.setState({ 
@@ -104,8 +94,6 @@ class Foodie extends React.Component {
     openReview(index) {
         var resid = this.state.resData[index].id
         var url = "https://developers.zomato.com/api/v2.1/reviews?res_id="+resid
-        
-        this.handleClickOpen('openReview')
 
         var successCallback = function(result){
             var reviewData = []
@@ -122,7 +110,8 @@ class Foodie extends React.Component {
                 reviewData.push(tempObj)
             }
             this.setState({
-                reviewData: reviewData
+                whichOpen: "review",
+                whichInfo: reviewData
             })
         }.bind(this)
         
@@ -136,8 +125,6 @@ class Foodie extends React.Component {
     openEvent(index) {
         var resid = this.state.resData[index].id
         var url = "https://developers.zomato.com/api/v2.1/restaurant?res_id="+resid
-
-        this.handleClickOpen('openEvent')
 
         var successCallback = function(result){
             var eventData = []
@@ -154,7 +141,8 @@ class Foodie extends React.Component {
                 eventData.push(tempObj)
             }
             this.setState({
-                eventData: eventData
+                whichOpen: "event",
+                whichInfo: eventData
             })
         }.bind(this)
 
@@ -169,8 +157,9 @@ class Foodie extends React.Component {
         var location = this.state.resData[index].location
         console.log(location)
         this.setState({
-            areaLocation: location
-        }, this.handleClickOpen('openArea'))
+            whichOpen: "foodie",
+            whichInfo: location
+        })
     }
 
     componentDidMount(){
@@ -197,7 +186,7 @@ class Foodie extends React.Component {
                                 <Button color="inherit" disabled={Number(this.state.pageNumber) === 0} onClick={() => this.setState(prevState => ({ pageNumber: prevState.pageNumber-1}), this.dataFetcher)}>Previos</Button>
                                 <Button color="inherit" disabled={(Number(this.state.pageNumber)+1)*18 >= Number(this.state.totalRes)} onClick={() => this.setState(prevState => ({ pageNumber: prevState.pageNumber+1}), this.dataFetcher)}>Next</Button>
                             </div>
-                            <Button color="inherit" onClick={() => this.handleClickOpen('openCity')}>City</Button>
+                            <Button color="inherit" onClick={() => {this.setState({whichOpen: "edit"})}}>Filters</Button>
                         </Toolbar>
                     </AppBar>
                 </div>
@@ -220,36 +209,46 @@ class Foodie extends React.Component {
                     </Grid>
                     </div>
                     <div>
-                        <EditDialog
-                            open={this.state.openCity}
-                            whichCity={this.state.whichCity}
-                            whichSort={this.state.whichSort}
-                            whichOrder={this.state.whichOrder}
-                            whichName={this.state.whichName}
-                            handleClose={this.handleClose}
-                            handleChange={this.handleChange}
-                        />
-                    </div>
-                    <div>
-                        <ReviewDialog
-                            open={this.state.openReview}
-                            handleClose={this.handleClose}
-                            reviewData={this.state.reviewData}
-                        />
-                    </div>
-                    <div>
-                        <EventDialog
-                            open={this.state.openEvent}
-                            handleClose={this.handleClose}
-                            eventData={this.state.eventData}
-                        />
-                    </div>
-                    <div>
-                        <AreaDialog
-                            open={this.state.openArea}
-                            handleClose={this.handleClose}
-                            location={this.state.areaLocation}
-                        />
+                        <Dialog            
+                            disableBackdropClick
+                            disableEscapeKeyDown
+                            open={this.state.whichOpen !== ""}
+                            onClose={() => {this.setState({whichOpen: ""})}}
+                        >
+                            <DialogTitle id="dialog-title">{this.state.whichOpen}</DialogTitle>  
+                            <DialogContent>
+                                <div style={{width: 500}}>
+                                {
+                                    this.state.whichOpen === "edit" ? (
+                                        <EditDialog
+                                            whichCity={this.state.whichCity}
+                                            whichSort={this.state.whichSort}
+                                            whichOrder={this.state.whichOrder}
+                                            whichName={this.state.whichName}
+                                            handleChange={this.handleChange}
+                                        />
+                                    ) : this.state.whichOpen === "review" ? (
+                                        <ReviewDialog
+                                            reviewData={this.state.whichInfo}
+                                        />
+                                    ) : this.state.whichOpen === "event" ? (
+                                        <EventDialog
+                                            eventData={this.state.whichInfo}
+                                        />
+                                    ) : this.state.whichOpen === "foodie" ? (
+                                        <AreaDialog
+                                            location={this.state.whichInfo}
+                                        />
+                                    ) : null
+                                }
+                                </div>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={() => {this.setState({whichOpen: ""})}} color="primary">
+                                    Close
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
                     </div>
                 </div>
             </div>
